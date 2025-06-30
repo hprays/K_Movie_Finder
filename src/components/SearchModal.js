@@ -5,6 +5,10 @@ const SearchModal = ({ isOpen, onClose }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchType, setSearchType] = useState('영화 제목');
+  
+  // KOBIS API 키
+  const KOBIS_API_KEY = '347bfdbac8ec4c0bb074c1187ab08348';
 
   // ESC 키로 모달 닫기
   useEffect(() => {
@@ -31,46 +35,34 @@ const SearchModal = ({ isOpen, onClose }) => {
 
     setIsLoading(true);
     
-    // 실제 API 호출 대신 임시 데이터 사용
-    setTimeout(() => {
-      const mockResults = [
-        {
-          id: 1,
-          title: '인셉션',
-          year: 2010,
-          rating: 8.8,
-          genre: 'SF, 액션',
-          director: '크리스토퍼 놀란'
-        },
-        {
-          id: 2,
-          title: '포레스트 검프',
-          year: 1994,
-          rating: 8.8,
-          genre: '드라마',
-          director: '로버트 저메키스'
-        },
-        {
-          id: 3,
-          title: '타이타닉',
-          year: 1997,
-          rating: 7.9,
-          genre: '로맨스, 드라마',
-          director: '제임스 카메론'
-        }
-      ].filter(movie => 
-        movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        movie.director.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      
-      setSearchResults(mockResults);
+    try {
+      let url;
+      if (searchType === '영화 제목') {
+        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&movieNm=${encodeURIComponent(searchTerm)}`;
+      } else {
+        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&directorNm=${encodeURIComponent(searchTerm)}`;
+      }
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.movieListResult && data.movieListResult.movieList) {
+        setSearchResults(data.movieListResult.movieList);
+      } else {
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error('영화 검색 중 오류 발생:', error);
+      setSearchResults([]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleClose = () => {
     setSearchTerm('');
     setSearchResults([]);
+    setSearchType('영화 제목');
     onClose();
   };
 
@@ -87,12 +79,31 @@ const SearchModal = ({ isOpen, onClose }) => {
         </div>
 
         <form onSubmit={handleSearch} className="search-form">
+          <div className="search-toggle-container">
+            <div className="search-toggle">
+              <button
+                type="button"
+                className={`toggle-button ${searchType === '영화 제목' ? 'active' : ''}`}
+                onClick={() => setSearchType('영화 제목')}
+              >
+                영화제목
+              </button>
+              <button
+                type="button"
+                className={`toggle-button ${searchType === '감독명' ? 'active' : ''}`}
+                onClick={() => setSearchType('감독명')}
+              >
+                감독명
+              </button>
+            </div>
+          </div>
+          
           <div className="search-input-container">
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="영화 제목이나 감독을 검색해보세요..."
+              placeholder={searchType === '영화 제목' ? '영화 제목을 검색해보세요...' : '감독명을 검색해보세요...'}
               className="search-input"
               autoFocus
             />
@@ -112,22 +123,9 @@ const SearchModal = ({ isOpen, onClose }) => {
 
           {!isLoading && searchResults.length > 0 && (
             <div className="results-list">
-              {searchResults.map(movie => (
-                <div key={movie.id} className="movie-card">
-                  <div className="movie-info">
-                    <h3>{movie.title}</h3>
-                    <p className="movie-details">
-                      <span className="year">{movie.year}</span>
-                      <span className="rating">⭐ {movie.rating}</span>
-                      <span className="genre">{movie.genre}</span>
-                    </p>
-                    <p className="director">감독: {movie.director}</p>
-                  </div>
-                  <button className="recommend-button">
-                    추천받기
-                  </button>
-                </div>
-              ))}
+              {/* 검색 결과는 다른 담당자가 구현할 예정 */}
+              <p>검색 결과 {searchResults.length}개</p>
+              <pre>{JSON.stringify(searchResults, null, 2)}</pre>
             </div>
           )}
 

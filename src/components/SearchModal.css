@@ -74,6 +74,42 @@
   padding: 20px 30px;
 }
 
+.search-toggle-container {
+  margin-bottom: 15px;
+}
+
+.search-toggle {
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 25px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.toggle-button {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.toggle-button.active {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.toggle-button:hover:not(.active) {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
 .search-input-container {
   display: flex;
   gap: 10px;
@@ -225,6 +261,14 @@
   margin: 5px 0;
 }
 
+.open-date {
+  background: #fff3e0;
+  color: #e65100;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     width: 95%;
@@ -237,6 +281,16 @@
   
   .search-form {
     padding: 15px 20px;
+  }
+  
+  .search-toggle {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .toggle-button {
+    padding: 12px 20px;
+    font-size: 1rem;
   }
   
   .search-input-container {
