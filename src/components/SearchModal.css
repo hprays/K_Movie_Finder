@@ -15,9 +15,9 @@
 .modal-content {
   background: white;
   border-radius: 20px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
+  width: 95%;
+  max-width: 1200px;
+  max-height: 95vh;
   overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   animation: modalSlideIn 0.3s ease-out;
@@ -39,8 +39,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 30px;
-  border-bottom: 1px solid #eee;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
   color: white;
   border-radius: 20px 20px 0 0;
 }
@@ -80,7 +80,7 @@
 
 .search-toggle {
   display: flex;
-  background: #f0f0f0;
+  background: #f5f5f5;
   border-radius: 25px;
   padding: 4px;
   gap: 4px;
@@ -100,14 +100,14 @@
 }
 
 .toggle-button.active {
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #4a5568, #2d3748);
   color: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(74, 85, 104, 0.3);
 }
 
 .toggle-button:hover:not(.active) {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: rgba(74, 85, 104, 0.1);
+  color: #4a5568;
 }
 
 .search-input-container {
@@ -126,11 +126,11 @@
 }
 
 .search-input:focus {
-  border-color: #667eea;
+  border-color: #4a5568;
 }
 
 .search-submit {
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #4a5568, #2d3748);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -142,7 +142,7 @@
 
 .search-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(74, 85, 104, 0.4);
 }
 
 .search-submit:disabled {
@@ -152,6 +152,9 @@
 
 .search-results {
   padding: 0 30px 30px;
+  min-height: 60vh;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .loading {
@@ -164,7 +167,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border-top: 4px solid #4a5568;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 20px;
@@ -186,9 +189,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background: #f8f9fa;
+  background: #fafafa;
   border-radius: 15px;
-  border: 1px solid #e9ecef;
+  border: 1px solid #e5e5e5;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -236,7 +239,7 @@
 }
 
 .recommend-button {
-  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(45deg, #6b7280, #4b5563);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -248,7 +251,7 @@
 
 .recommend-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 3px 10px rgba(107, 114, 128, 0.3);
 }
 
 .no-results {
