@@ -94,8 +94,18 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
                 <p><strong>"{searchQuery}"</strong> 검색 결과 {searchResults.length}개</p>
                 <p>검색 유형: {searchType === 'title' ? '영화 제목' : '감독 이름'}</p>
               </div>
-              {/* 검색 결과는 다른 담당자가 구현할 예정 */}
-              <pre>{JSON.stringify(searchResults, null, 2)}</pre>
+              <ul className="movie-list">
+                {searchResults.map((movie, idx) => (
+                  <li key={idx} className="movie-item">
+                    <div className="movie-title"><strong>{movie.movieNm}</strong></div>
+                    <div className="movie-info">
+                      <span>감독: {movie.directors && movie.directors.length > 0 ? movie.directors.map(d => d.peopleNm).join(', ') : '정보 없음'}</span>
+                      <span> | 개봉년도: {movie.prdtYear || '정보 없음'}</span>
+                      <span> | 장르: {movie.genreAlt || '정보 없음'}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 

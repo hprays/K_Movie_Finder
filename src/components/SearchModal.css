@@ -332,4 +332,30 @@
   .recommend-button {
     align-self: stretch;
   }
+}
+
+.movie-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0 0;
+}
+.movie-item {
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+.movie-item:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+.movie-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+.movie-info {
+  color: #555;
+  font-size: 0.98rem;
 } 
