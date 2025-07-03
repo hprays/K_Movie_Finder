@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './SearchModal.css';
 
-const SearchModal = ({ isOpen, onClose }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchType, setSearchType] = useState('영화 제목');
   
   // KOBIS API 키
   const KOBIS_API_KEY = '347bfdbac8ec4c0bb074c1187ab08348';
@@ -29,18 +27,24 @@ const SearchModal = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) return;
+  // 검색 쿼리가 변경되면 자동으로 검색 실행
+  useEffect(() => {
+    if (isOpen && searchQuery.trim()) {
+      performSearch();
+    }
+  }, [isOpen, searchQuery, searchType]);
+
+  const performSearch = async () => {
+    if (!searchQuery.trim()) return;
 
     setIsLoading(true);
     
     try {
       let url;
-      if (searchType === '영화 제목') {
-        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&movieNm=${encodeURIComponent(searchTerm)}`;
+      if (searchType === 'title') {
+        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&movieNm=${encodeURIComponent(searchQuery)}`;
       } else {
-        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&directorNm=${encodeURIComponent(searchTerm)}`;
+        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&directorNm=${encodeURIComponent(searchQuery)}`;
       }
 
       const response = await fetch(url);
@@ -60,9 +64,7 @@ const SearchModal = ({ isOpen, onClose }) => {
   };
 
   const handleClose = () => {
-    setSearchTerm('');
     setSearchResults([]);
-    setSearchType('영화 제목');
     onClose();
   };
 
@@ -72,46 +74,11 @@ const SearchModal = ({ isOpen, onClose }) => {
     <div className="modal-overlay" onClick={handleClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>🎬 영화 검색</h2>
+          <h2>🎬 검색 결과</h2>
           <button className="close-button" onClick={handleClose}>
             ✕
           </button>
         </div>
-
-        <form onSubmit={handleSearch} className="search-form">
-          <div className="search-toggle-container">
-            <div className="search-toggle">
-              <button
-                type="button"
-                className={`toggle-button ${searchType === '영화 제목' ? 'active' : ''}`}
-                onClick={() => setSearchType('영화 제목')}
-              >
-                영화제목
-              </button>
-              <button
-                type="button"
-                className={`toggle-button ${searchType === '감독명' ? 'active' : ''}`}
-                onClick={() => setSearchType('감독명')}
-              >
-                감독명
-              </button>
-            </div>
-          </div>
-          
-          <div className="search-input-container">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={searchType === '영화 제목' ? '영화 제목을 검색해보세요...' : '감독명을 검색해보세요...'}
-              className="search-input"
-              autoFocus
-            />
-            <button type="submit" className="search-submit" disabled={isLoading}>
-              {isLoading ? '검색 중...' : '검색'}
-            </button>
-          </div>
-        </form>
 
         <div className="search-results">
           {isLoading && (
@@ -123,13 +90,16 @@ const SearchModal = ({ isOpen, onClose }) => {
 
           {!isLoading && searchResults.length > 0 && (
             <div className="results-list">
+              <div className="search-info">
+                <p><strong>"{searchQuery}"</strong> 검색 결과 {searchResults.length}개</p>
+                <p>검색 유형: {searchType === 'title' ? '영화 제목' : '감독 이름'}</p>
+              </div>
               {/* 검색 결과는 다른 담당자가 구현할 예정 */}
-              <p>검색 결과 {searchResults.length}개</p>
               <pre>{JSON.stringify(searchResults, null, 2)}</pre>
             </div>
           )}
 
-          {!isLoading && searchTerm && searchResults.length === 0 && (
+          {!isLoading && searchQuery && searchResults.length === 0 && (
             <div className="no-results">
               <p>검색 결과가 없습니다.</p>
               <p>다른 키워드로 검색해보세요.</p>

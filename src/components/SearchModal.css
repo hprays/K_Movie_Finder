@@ -264,6 +264,25 @@
   margin: 5px 0;
 }
 
+.search-info {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #718096;
+}
+
+.search-info p {
+  margin: 5px 0;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+.search-info strong {
+  color: #2d3748;
+  font-weight: 600;
+}
+
 .open-date {
   background: #fff3e0;
   color: #e65100;
