@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MovieDetailModal from './MovieDetailModal';
 import './SearchModal.css';
 
 const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
@@ -7,6 +8,11 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
   const yearOptions = [2025, 2020, 2015, 2010, 2005, 2000, 1995, 1990, 1985, 1980];
   const [yearFilter, setYearFilter] = useState('');
   const [yearMode, setYearMode] = useState('after');
+  
+  // 영화 상세 모달 관련 state
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedMovieCode, setSelectedMovieCode] = useState('');
+  const [selectedMovieTitle, setSelectedMovieTitle] = useState('');
   
   // KOBIS API 키
   const KOBIS_API_KEY = '347bfdbac8ec4c0bb074c1187ab08348';
@@ -68,7 +74,24 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
 
   const handleClose = () => {
     setSearchResults([]);
+    setIsDetailModalOpen(false);
+    setSelectedMovieCode('');
+    setSelectedMovieTitle('');
     onClose();
+  };
+
+  // 영화 상세 정보 모달 열기
+  const openDetailModal = (movieCode, movieTitle) => {
+    setSelectedMovieCode(movieCode);
+    setSelectedMovieTitle(movieTitle);
+    setIsDetailModalOpen(true);
+  };
+
+  // 영화 상세 정보 모달 닫기
+  const closeDetailModal = () => {
+    setIsDetailModalOpen(false);
+    setSelectedMovieCode('');
+    setSelectedMovieTitle('');
   };
 
   if (!isOpen) return null;
@@ -141,7 +164,12 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
                     return true;
                   })
                   .map((movie, idx) => (
-                    <li key={idx} className="movie-item">
+                    <li 
+                      key={idx} 
+                      className="movie-item clickable" 
+                      onClick={() => openDetailModal(movie.movieCd, movie.movieNm)}
+                      title="클릭하여 상세 정보 보기"
+                    >
                       <div className="movie-title"><strong>{movie.movieNm}</strong></div>
                       <div className="movie-info">
                         <span>감독: {movie.directors && movie.directors.length > 0 ? movie.directors.map(d => d.peopleNm).join(', ') : '정보 없음'}</span>
@@ -162,6 +190,14 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
           )}
         </div>
       </div>
+      
+      {/* 영화 상세 정보 모달 */}
+      <MovieDetailModal
+        isOpen={isDetailModalOpen}
+        onClose={closeDetailModal}
+        movieCode={selectedMovieCode}
+        movieTitle={selectedMovieTitle}
+      />
     </div>
   );
 };

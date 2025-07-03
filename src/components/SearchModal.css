@@ -350,6 +350,18 @@
 .movie-item:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
 }
+
+.movie-item.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.movie-item.clickable:hover {
+  background-color: #e3f2fd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #2196f3;
+}
 .movie-title {
   font-size: 1.2rem;
   font-weight: bold;

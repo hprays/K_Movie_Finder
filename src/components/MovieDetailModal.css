@@ -1,0 +1,222 @@
+/* 상세 모달 오버레이 */
+.detail-modal-overlay {
+  z-index: 2000; /* SearchModal보다 위에 표시 */
+}
+
+/* 상세 모달 컨텐츠 */
+.detail-modal-content {
+  max-width: 800px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* 영화 상세 내용 컨테이너 */
+.movie-detail-content {
+  padding: 20px;
+}
+
+/* 상세 정보 섹션 */
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.detail-section {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 4px solid #007bff;
+}
+
+.detail-section h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+/* 기본 정보 그리드 */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.detail-item {
+  background-color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  line-height: 1.5;
+}
+
+.detail-item strong {
+  color: #495057;
+  margin-right: 8px;
+}
+
+.english-title {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+/* 인물 목록 */
+.people-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.person-item {
+  background-color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.person-item strong {
+  color: #333;
+}
+
+.english-name {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.character {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.more-actors {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+/* 제작사 목록 */
+.company-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.company-item {
+  background-color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.company-item strong {
+  color: #333;
+}
+
+.company-part {
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+/* 에러 메시지 */
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+}
+
+.error-message p {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+/* 로딩 스타일 (기존 SearchModal과 동일하게 유지) */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+.loading p {
+  margin: 0;
+  color: #666;
+  font-size: 1.1em;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .detail-modal-content {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .movie-detail-content {
+    padding: 15px;
+  }
+  
+  .detail-section {
+    padding: 15px;
+  }
+  
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .detail-section h3 {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-modal-content {
+    width: 98%;
+  }
+  
+  .movie-detail-content {
+    padding: 10px;
+  }
+  
+  .detail-section {
+    padding: 12px;
+  }
+  
+  .detail-item,
+  .person-item,
+  .company-item {
+    padding: 10px 12px;
+  }
+} 
