@@ -4,7 +4,9 @@ import './SearchModal.css';
 const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const yearOptions = [2025, 2020, 2015, 2010, 2005, 2000, 1995, 1990, 1985, 1980];
   const [yearFilter, setYearFilter] = useState('');
+  const [yearMode, setYearMode] = useState('after');
   
   // KOBIS API 키
   const KOBIS_API_KEY = '347bfdbac8ec4c0bb074c1187ab08348';
@@ -96,24 +98,47 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
                 <p>검색 유형: {searchType === 'title' ? '영화 제목' : '감독 이름'}</p>
               </div>
               <div className="filter-bar">
-                <label htmlFor="yearFilter">개봉연도(이후): </label>
-                <input
-                  id="yearFilter"
-                  type="number"
-                  min="1900"
-                  max={new Date().getFullYear()}
-                  placeholder="예: 2010"
-                  value={yearFilter}
-                  onChange={e => setYearFilter(e.target.value)}
-                  style={{ width: '100px', marginLeft: '8px' }}
-                />
+                <div className="filter-bar-row">
+                  <span className="filter-label">개봉연도</span>
+                  <div className="year-mode-group">
+                    <button
+                      className={`year-mode-btn${yearMode === 'after' ? ' selected' : ''}`}
+                      onClick={() => setYearMode('after')}
+                    >이후</button>
+                    <button
+                      className={`year-mode-btn${yearMode === 'before' ? ' selected' : ''}`}
+                      onClick={() => setYearMode('before')}
+                    >이전</button>
+                  </div>
+                </div>
+                <div className="year-btn-group">
+                  {yearOptions.map((year) => (
+                    <button
+                      key={year}
+                      className={`year-btn${yearFilter === String(year) ? ' selected' : ''}`}
+                      onClick={() => setYearFilter(String(year))}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                  <button
+                    className={`year-btn${yearFilter === '' ? ' selected' : ''}`}
+                    onClick={() => setYearFilter('')}
+                  >
+                    전체
+                  </button>
+                </div>
               </div>
               <ul className="movie-list">
                 {searchResults
                   .filter(movie => {
                     if (!yearFilter) return true;
                     if (!movie.prdtYear) return false;
-                    return parseInt(movie.prdtYear) >= parseInt(yearFilter);
+                    const movieYear = parseInt(movie.prdtYear);
+                    const filterYear = parseInt(yearFilter);
+                    if (yearMode === 'after') return movieYear >= filterYear;
+                    if (yearMode === 'before') return movieYear <= filterYear;
+                    return true;
                   })
                   .map((movie, idx) => (
                     <li key={idx} className="movie-item">
