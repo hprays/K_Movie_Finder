@@ -1,7 +1,14 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 25%, #a0aec0 50%, #718096 75%, #4a5568 100%);
+  background: linear-gradient(
+    135deg,
+    #e2e8f0 0%,
+    #cbd5e0 25%,
+    #a0aec0 50%,
+    #718096 75%,
+    #4a5568 100%
+  );
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -232,14 +239,14 @@
     top: 20px;
     right: 20px;
   }
-  
+
   .dropdown-group {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .dropdown-select {
     min-width: 100px;
     font-size: 0.8rem;
   }
-} 
+}
