@@ -11,6 +11,10 @@
 
 # Misc
 .DS_Store
+<<<<<<< HEAD
+=======
+.env
+>>>>>>> 274deffa (externalize API key and set up proxy server)
 .env.local
 .env.development.local
 .env.test.local

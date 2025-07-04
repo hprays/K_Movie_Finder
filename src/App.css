@@ -199,39 +199,32 @@
 }
 
 .menu-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  color: #2d3748;
+  background: linear-gradient(45deg, #718096, #4a5568);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
   transition: all 0.3s ease;
-  width: 50px;
-  height: 50px;
+  box-shadow: 0 2px 8px rgba(113, 128, 150, 0.2);
+  margin-left: 10px;
 }
 
 .menu-button:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
+  background: linear-gradient(45deg, #4a5568, #718096);
+  box-shadow: 0 4px 16px rgba(113, 128, 150, 0.3);
 }
 
 .menu-button:focus {
   outline: none;
-  border-color: #718096;
   box-shadow: 0 0 0 3px rgba(113, 128, 150, 0.2);
 }
 
 .menu-icon {
-  font-size: 1.3rem;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 1.5rem;
+  vertical-align: middle;
 }
 
 @media (max-width: 768px) {

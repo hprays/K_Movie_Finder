@@ -5,17 +5,19 @@ import './SearchModal.css';
 const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const yearOptions = [2025, 2020, 2015, 2010, 2005, 2000, 1995, 1990, 1985, 1980];
+  const yearOptions = [
+    2025, 2020, 2015, 2010, 2005, 2000, 1995, 1990, 1985, 1980,
+  ];
   const [yearFilter, setYearFilter] = useState('');
   const [yearMode, setYearMode] = useState('after');
-  
+
   // 영화 상세 모달 관련 state
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedMovieCode, setSelectedMovieCode] = useState('');
   const [selectedMovieTitle, setSelectedMovieTitle] = useState('');
-  
-  // KOBIS API 키
-  const KOBIS_API_KEY = '347bfdbac8ec4c0bb074c1187ab08348';
+
+  // KOBIS API 키 (환경변수에서 불러오기)
+  const KOBIS_API_KEY = process.env.REACT_APP_KOBIS_API_KEY;
 
   // ESC 키로 모달 닫기
   useEffect(() => {
@@ -24,12 +26,12 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
         onClose();
       }
     };
-    
+
     if (isOpen) {
       document.addEventListener('keydown', handleEsc);
       document.body.style.overflow = 'hidden';
     }
-    
+
     return () => {
       document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = 'unset';
@@ -47,13 +49,19 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
     if (!searchQuery.trim()) return;
 
     setIsLoading(true);
-    
+
     try {
       let url;
       if (searchType === 'title') {
-        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&movieNm=${encodeURIComponent(searchQuery)}`;
-      } else {
-        url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&directorNm=${encodeURIComponent(searchQuery)}`;
+        if (searchType === 'title') {
+          url = `http://localhost:5000/api/search?type=title&query=${encodeURIComponent(
+            searchQuery
+          )}`;
+        } else {
+          url = `http://localhost:5000/api/search?type=director&query=${encodeURIComponent(
+            searchQuery
+          )}`;
+        }
       }
 
       const response = await fetch(url);
@@ -117,35 +125,53 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
           {!isLoading && searchResults.length > 0 && (
             <div className="results-list">
               <div className="search-info">
-                <p><strong>"{searchQuery}"</strong> 검색 결과 {searchResults.length}개</p>
-                <p>검색 유형: {searchType === 'title' ? '영화 제목' : '감독 이름'}</p>
+                <p>
+                  <strong>"{searchQuery}"</strong> 검색 결과{' '}
+                  {searchResults.length}개
+                </p>
+                <p>
+                  검색 유형:{' '}
+                  {searchType === 'title' ? '영화 제목' : '감독 이름'}
+                </p>
               </div>
               <div className="filter-bar">
                 <div className="filter-bar-row">
                   <span className="filter-label">개봉연도</span>
                   <div className="year-mode-group">
                     <button
-                      className={`year-mode-btn${yearMode === 'after' ? ' selected' : ''}`}
+                      className={`year-mode-btn${
+                        yearMode === 'after' ? ' selected' : ''
+                      }`}
                       onClick={() => setYearMode('after')}
-                    >이후</button>
+                    >
+                      이후
+                    </button>
                     <button
-                      className={`year-mode-btn${yearMode === 'before' ? ' selected' : ''}`}
+                      className={`year-mode-btn${
+                        yearMode === 'before' ? ' selected' : ''
+                      }`}
                       onClick={() => setYearMode('before')}
-                    >이전</button>
+                    >
+                      이전
+                    </button>
                   </div>
                 </div>
                 <div className="year-btn-group">
                   {yearOptions.map((year) => (
                     <button
                       key={year}
-                      className={`year-btn${yearFilter === String(year) ? ' selected' : ''}`}
+                      className={`year-btn${
+                        yearFilter === String(year) ? ' selected' : ''
+                      }`}
                       onClick={() => setYearFilter(String(year))}
                     >
                       {year}
                     </button>
                   ))}
                   <button
-                    className={`year-btn${yearFilter === '' ? ' selected' : ''}`}
+                    className={`year-btn${
+                      yearFilter === '' ? ' selected' : ''
+                    }`}
                     onClick={() => setYearFilter('')}
                   >
                     전체
@@ -154,7 +180,7 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
               </div>
               <ul className="movie-list">
                 {searchResults
-                  .filter(movie => {
+                  .filter((movie) => {
                     if (!yearFilter) return true;
                     if (!movie.prdtYear) return false;
                     const movieYear = parseInt(movie.prdtYear);
@@ -164,16 +190,28 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
                     return true;
                   })
                   .map((movie, idx) => (
-                    <li 
-                      key={idx} 
-                      className="movie-item clickable" 
-                      onClick={() => openDetailModal(movie.movieCd, movie.movieNm)}
+                    <li
+                      key={idx}
+                      className="movie-item clickable"
+                      onClick={() =>
+                        openDetailModal(movie.movieCd, movie.movieNm)
+                      }
                       title="클릭하여 상세 정보 보기"
                     >
-                      <div className="movie-title"><strong>{movie.movieNm}</strong></div>
+                      <div className="movie-title">
+                        <strong>{movie.movieNm}</strong>
+                      </div>
                       <div className="movie-info">
-                        <span>감독: {movie.directors && movie.directors.length > 0 ? movie.directors.map(d => d.peopleNm).join(', ') : '정보 없음'}</span>
-                        <span> | 개봉년도: {movie.prdtYear || '정보 없음'}</span>
+                        <span>
+                          감독:{' '}
+                          {movie.directors && movie.directors.length > 0
+                            ? movie.directors.map((d) => d.peopleNm).join(', ')
+                            : '정보 없음'}
+                        </span>
+                        <span>
+                          {' '}
+                          | 개봉년도: {movie.prdtYear || '정보 없음'}
+                        </span>
                         <span> | 장르: {movie.genreAlt || '정보 없음'}</span>
                       </div>
                     </li>
@@ -190,7 +228,7 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
           )}
         </div>
       </div>
-      
+
       {/* 영화 상세 정보 모달 */}
       <MovieDetailModal
         isOpen={isDetailModalOpen}
@@ -202,4 +240,4 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
   );
 };
 
-export default SearchModal; 
+export default SearchModal;

@@ -5,8 +5,6 @@ const MovieDetailModal = ({ isOpen, onClose, movieCode, movieTitle }) => {
   const [movieDetail, setMovieDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  
-  const KOBIS_API_KEY = '347bfdbac8ec4c0bb074c1187ab08348';
 
   // ESC 키로 모달 닫기
   useEffect(() => {
@@ -39,7 +37,7 @@ const MovieDetailModal = ({ isOpen, onClose, movieCode, movieTitle }) => {
     setError(null);
     
     try {
-      const url = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${KOBIS_API_KEY}&movieCd=${movieCode}`;
+      const url = `http://localhost:5000/api/movie-detail?movieCode=${movieCode}`;
       const response = await fetch(url);
       const data = await response.json();
 
