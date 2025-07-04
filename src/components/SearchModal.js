@@ -53,15 +53,13 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
     try {
       let url;
       if (searchType === 'title') {
-        if (searchType === 'title') {
-          url = `http://localhost:5000/api/search?type=title&query=${encodeURIComponent(
-            searchQuery
-          )}`;
-        } else {
-          url = `http://localhost:5000/api/search?type=director&query=${encodeURIComponent(
-            searchQuery
-          )}`;
-        }
+        url = `http://localhost:5000/api/search?type=title&query=${encodeURIComponent(
+          searchQuery
+        )}`;
+      } else {
+        url = `http://localhost:5000/api/search?type=director&query=${encodeURIComponent(
+          searchQuery
+        )}`;
       }
 
       const response = await fetch(url);
