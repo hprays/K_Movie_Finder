@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
-const API_KEY = process.env.API_KEY; // .env에서 불러옴
+const KOBIS_API_KEY = process.env.KOBIS_API_KEY; // .env에서 불러옴
 const TMDB_API_KEY = process.env.TMDB_API_KEY; // TMDB API 키
 
 app.get('/api/search', async (req, res) => {
@@ -17,9 +17,9 @@ app.get('/api/search', async (req, res) => {
   try {
     let kobisUrl;
     if (type === 'title') {
-      kobisUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${API_KEY}&movieNm=${encodeURIComponent(query)}`;
+      kobisUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&movieNm=${encodeURIComponent(query)}`;
     } else {
-      kobisUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${API_KEY}&directorNm=${encodeURIComponent(query)}`;
+      kobisUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json?key=${KOBIS_API_KEY}&directorNm=${encodeURIComponent(query)}`;
     }
     const response = await axios.get(kobisUrl);
     res.json(response.data);
@@ -34,7 +34,7 @@ app.get('/api/movie-detail', async (req, res) => {
     return res.status(400).json({ error: 'movieCode 파라미터가 필요합니다.' });
   }
   try {
-    const kobisUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${API_KEY}&movieCd=${movieCode}`;
+    const kobisUrl = `https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${KOBIS_API_KEY}&movieCd=${movieCode}`;
     const response = await axios.get(kobisUrl);
     res.json(response.data);
   } catch (error) {
