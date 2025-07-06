@@ -177,6 +177,92 @@
   100% { transform: rotate(360deg); }
 }
 
+/* 줄거리 섹션 스타일 */
+.plot-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plot-section h3 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+
+.plot-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.movie-poster {
+  flex-shrink: 0;
+  width: 150px;
+  height: 225px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plot-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.plot-text p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-size: 0.95em;
+  text-align: justify;
+}
+
+.plot-meta {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.rating {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.runtime {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.plot-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.plot-loading p {
+  margin-top: 10px;
+  color: #666;
+  font-size: 0.9em;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .detail-modal-content {
@@ -198,6 +284,25 @@
   
   .detail-section h3 {
     font-size: 1.2em;
+  }
+  
+  .plot-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .movie-poster {
+    width: 120px;
+    height: 180px;
+  }
+  
+  .plot-meta {
+    justify-content: center;
+  }
+  
+  .plot-text p {
+    text-align: left;
   }
 }
 

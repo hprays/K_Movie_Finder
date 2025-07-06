@@ -3,7 +3,9 @@ import './MovieDetailModal.css';
 
 const MovieDetailModal = ({ isOpen, onClose, movieCode, movieTitle }) => {
   const [movieDetail, setMovieDetail] = useState(null);
+  const [plotInfo, setPlotInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPlotLoading, setIsPlotLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // ESC 키로 모달 닫기
@@ -29,8 +31,16 @@ const MovieDetailModal = ({ isOpen, onClose, movieCode, movieTitle }) => {
   useEffect(() => {
     if (isOpen && movieCode) {
       fetchMovieDetail();
+      fetchMoviePlot();
     }
   }, [isOpen, movieCode]);
+
+  // KOBIS 데이터가 로드된 후 연도 정보로 줄거리 재검색
+  useEffect(() => {
+    if (movieDetail && movieDetail.prdtYear && !plotInfo) {
+      fetchMoviePlotWithYear();
+    }
+  }, [movieDetail, plotInfo]);
 
   const fetchMovieDetail = async () => {
     setIsLoading(true);
@@ -54,8 +64,45 @@ const MovieDetailModal = ({ isOpen, onClose, movieCode, movieTitle }) => {
     }
   };
 
+  const fetchMoviePlot = async () => {
+    if (!movieTitle) return;
+    
+    setIsPlotLoading(true);
+    try {
+      // movieDetail이 로드되기를 기다리지 않고 바로 줄거리 요청
+      const url = `http://localhost:5000/api/movie-plot?title=${encodeURIComponent(movieTitle)}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.plot && data.plot !== '줄거리 정보가 없습니다.' && data.plot !== '줄거리 정보를 찾을 수 없습니다.') {
+        setPlotInfo(data);
+      }
+    } catch (error) {
+      console.error('줄거리 정보 조회 중 오류 발생:', error);
+    } finally {
+      setIsPlotLoading(false);
+    }
+  };
+
+  const fetchMoviePlotWithYear = async () => {
+    if (!movieTitle || !movieDetail?.prdtYear) return;
+    
+    try {
+      const url = `http://localhost:5000/api/movie-plot?title=${encodeURIComponent(movieTitle)}&year=${movieDetail.prdtYear}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.plot && data.plot !== '줄거리 정보가 없습니다.' && data.plot !== '줄거리 정보를 찾을 수 없습니다.') {
+        setPlotInfo(data);
+      }
+    } catch (error) {
+      console.error('연도별 줄거리 정보 조회 중 오류 발생:', error);
+    }
+  };
+
   const handleClose = () => {
     setMovieDetail(null);
+    setPlotInfo(null);
     setError(null);
     onClose();
   };
@@ -91,6 +138,38 @@ const MovieDetailModal = ({ isOpen, onClose, movieCode, movieTitle }) => {
 
           {movieDetail && !isLoading && (
             <div className="detail-info">
+              {/* 줄거리 섹션 */}
+              {plotInfo && (
+                <div className="detail-section plot-section">
+                  <h3>📖 줄거리</h3>
+                  <div className="plot-content">
+                    {plotInfo.poster && (
+                      <div className="movie-poster">
+                        <img src={plotInfo.poster} alt={`${movieTitle} 포스터`} />
+                      </div>
+                    )}
+                    <div className="plot-text">
+                      <p>{plotInfo.plot}</p>
+                      {plotInfo.rating && (
+                        <div className="plot-meta">
+                          <span className="rating">⭐ {plotInfo.rating.toFixed(1)}</span>
+                          {plotInfo.runtime && (
+                            <span className="runtime">⏱️ {plotInfo.runtime}분</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isPlotLoading && (
+                <div className="plot-loading">
+                  <div className="spinner"></div>
+                  <p>줄거리 정보를 불러오고 있습니다...</p>
+                </div>
+              )}
+
               <div className="detail-section">
                 <h3>기본 정보</h3>
                 <div className="detail-grid">
