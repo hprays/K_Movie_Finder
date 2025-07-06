@@ -19,6 +19,11 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
   // KOBIS API 키 (환경변수에서 불러오기)
   const KOBIS_API_KEY = process.env.REACT_APP_KOBIS_API_KEY;
 
+  const GENRES = [
+    "액션", "드라마", "코미디", "로맨스", "스릴러", "공포", "SF", "판타지", "애니메이션", "다큐멘터리"
+  ];
+  const [selectedGenres, setSelectedGenres] = useState([]);
+
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEsc = (event) => {
@@ -100,6 +105,13 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
     setSelectedMovieTitle('');
   };
 
+  const handleGenreChange = (e) => {
+    const { value, checked } = e.target;
+    setSelectedGenres((prev) =>
+      checked ? [...prev, value] : prev.filter((g) => g !== value)
+    );
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -175,6 +187,29 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
                     전체
                   </button>
                 </div>
+                <div className="genre-filter-group" style={{ marginTop: '10px' }}>
+                  <span className="filter-label">장르</span>
+                  {GENRES.map((genre) => (
+                    <label key={genre} style={{ marginRight: '8px' }}>
+                      <input
+                        type="checkbox"
+                        value={genre}
+                        checked={selectedGenres.includes(genre)}
+                        onChange={handleGenreChange}
+                      />
+                      {genre}
+                    </label>
+                  ))}
+                  <label style={{ marginLeft: '12px' }}>
+                    <input
+                      type="checkbox"
+                      value="all"
+                      checked={selectedGenres.length === 0}
+                      onChange={() => setSelectedGenres([])}
+                    />
+                    전체
+                  </label>
+                </div>
               </div>
               <ul className="movie-list">
                 {searchResults
@@ -186,6 +221,12 @@ const SearchModal = ({ isOpen, onClose, searchQuery, searchType }) => {
                     if (yearMode === 'after') return movieYear >= filterYear;
                     if (yearMode === 'before') return movieYear <= filterYear;
                     return true;
+                  })
+                  .filter((movie) => {
+                    if (selectedGenres.length === 0) return true;
+                    if (!movie.genreAlt) return false;
+                    const movieGenres = movie.genreAlt.split(',').map((g) => g.trim());
+                    return selectedGenres.some((g) => movieGenres.includes(g));
                   })
                   .map((movie, idx) => (
                     <li
