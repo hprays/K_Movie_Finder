@@ -6,7 +6,8 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
-const KOBIS_API_KEY = process.env.KOBIS_API_KEY; // .env에서 불러옴
+// server/.env 파일에서 불러옴
+const KOBIS_API_KEY = process.env.KOBIS_API_KEY; // KOBIS API 키
 const TMDB_API_KEY = process.env.TMDB_API_KEY; // TMDB API 키
 
 app.get('/api/search', async (req, res) => {

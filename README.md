@@ -4,6 +4,8 @@
 
 ### 1. 프록시 서버 실행 (API 키 보호)
 
+`server/.env` 파일에 KOBIS, TMDB API 키를 입력. 프록시 서버는 5000번 포트에서 실행
+
 ```bash
 cd server
 npm install  # 최초 1회만
@@ -11,8 +13,6 @@ npm install express cors axios dotenv
 node proxy.js
 ```
 
-`server/.env` 파일에 KOBIS API 키를 입력
-프록시 서버는 5000번 포트에서 실행
 
 ### 2. 프론트엔드(React) 실행
 
