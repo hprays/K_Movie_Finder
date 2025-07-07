@@ -4,7 +4,6 @@ import './App.css';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('title');
 
@@ -24,33 +23,8 @@ function App() {
     }
   };
 
-  const genres = [
-    '액션', '드라마', '코미디', '로맨스', '스릴러', '호러', 
-    'SF', '판타지', '애니메이션', '다큐멘터리', '전쟁', '서부극',
-    '뮤지컬', '범죄', '모험', '가족', '역사', '스포츠'
-  ];
-
   return (
     <div className="App">
-      <div className="dropdowns-container">
-        <div className="dropdown-group">
-          <select 
-            className="dropdown-select genre-dropdown"
-            value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value)}
-          >
-            <option value="all">장르별</option>
-            {genres.map((genre, index) => (
-              <option key={index} value={genre}>{genre}</option>
-            ))}
-          </select>
-          
-          <button className="menu-button">
-            <span className="menu-icon">☰</span>
-          </button>
-        </div>
-      </div>
-
       <header className="App-header">
         <h1>Movie Finder</h1>
         <p>영화를 검색하고 정보를 찾아보세요</p>
